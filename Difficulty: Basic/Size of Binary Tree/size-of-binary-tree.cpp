@@ -115,19 +115,11 @@ struct Node
 
 class Solution {
   public:
-    void pre(Node* root,int &count)
-    {
-        if(root==NULL)
-        return;
-        count++;
-        pre(root->left,count);
-        pre(root->right,count);
-    }
     int getSize(Node* node) {
         // code here
-        int count=0;
-        pre(node,count);
-        return count;
+        if(node==NULL)
+        return 0;
+        return 1+getSize(node->left)+getSize(node->right);
     }
 };
 
