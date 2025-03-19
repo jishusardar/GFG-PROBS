@@ -100,37 +100,32 @@ class Solution {
     vector<int> findSpiral(Node* root) {
         // code here
         vector<int>ans;
-        stack<Node*>rtol;
-        stack<Node*>ltor;
-        rtol.push(root);
-        bool f=1;
-        int n=rtol.size();
-        while(!(rtol.empty()&&ltor.empty())){
-            while(n--){
-             if(f==1){
-                Node* temp=rtol.top();
-                rtol.pop();
-                ans.push_back(temp->data);
-                if(temp->right)
-                ltor.push(temp->right);
-                if(temp->left)
-                ltor.push(temp->left);
-             }
-             else{
-                Node* temp=ltor.top();
-                ltor.pop();
-                ans.push_back(temp->data);
-                if(temp->left)
-                rtol.push(temp->left);
-                if(temp->right)
-                rtol.push(temp->right);
-               }
+        stack<Node*>s1; //righttoleft
+        stack<Node*>s2; //left to right
+        s1.push(root);
+        while(!(s1.empty()&&s2.empty())){
+            if(!s1.empty()){
+                while(!s1.empty()){
+                    Node* temp=s1.top();
+                    s1.pop();
+                    ans.push_back(temp->data);
+                    if(temp->right)
+                    s2.push(temp->right);
+                    if(temp->left)
+                    s2.push(temp->left);
+                }
             }
-            if(f==1)
-            n=ltor.size();
-            else
-            n=rtol.size();
-            f=!f;
+            else{
+                while(!s2.empty()){
+                    Node* temp=s2.top();
+                    s2.pop();
+                    ans.push_back(temp->data);
+                    if(temp->left)
+                    s1.push(temp->left);
+                    if(temp->right)
+                    s1.push(temp->right);
+                }
+            }
         }
         return ans;
     }
