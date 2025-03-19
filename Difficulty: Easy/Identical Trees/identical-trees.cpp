@@ -40,9 +40,9 @@ class Solution {
         // Your Code here
         if(!r1&&!r2)
         return 1;
-        if(r1->data!=r2->data)
-        return 0;
         if(!(r1&&r2))
+        return 0;
+        if(r1->data!=r2->data)
         return 0;
         return isIdentical(r1->left,r1->left)&&isIdentical(r1->right,r2->right);
     }
