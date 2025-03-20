@@ -29,30 +29,33 @@ struct Node
 
 class Solution {
   public: 
-    void traverse(Node* root,vector<int>&ans)
-    {
-        queue<Node*>q;
-        q.push(root);
-        while(!q.empty()){
-            int n=q.size();
-            if(n!=0)
-            ans.push_back(q.front()->data);
-            while(n--){
-                Node* temp=q.front();
-                q.pop();
-                if(temp->left)
-                q.push(temp->left);
-                if(temp->right)
-                q.push(temp->right);
-            }
-        }
+  int height(Node* root)
+{
+    if(!root)
+    return 0;
+    return 1+max(height(root->left),height(root->right));
+}
+    void traversal(Node* root,vector<bool>&count,vector<int>&ans,int i)
+{
+    if(!root)
+    return;
+    if(count[i]==0){
+        ans.push_back(root->data);
+        count[i]=1;
     }
+    if(root->left)
+    traversal(root->left,count,ans,i+1);
+    if(root->right)
+    traversal(root->right,count,ans,i+1);
+
+}
     vector<int> leftView(Node *root) {
         // code here
         vector<int>ans;
         if(!root)
         return ans;
-        traverse(root,ans);
+        vector<bool>count(height(root));
+        traversal(root,count,ans,0);
         return ans;
     }
 };
