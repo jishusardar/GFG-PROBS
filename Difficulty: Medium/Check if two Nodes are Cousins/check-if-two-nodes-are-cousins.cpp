@@ -95,26 +95,13 @@ struct Node {
 class Solution {
   public:
     // Function to check if two nodes are cousins in a tree
-    int leveel(Node* root,int x)
+    int leveel(Node* root,int x,int count)
     {
-        queue<Node*>q;
-        q.push(root);
-        int level=0;
-        while(!q.empty()){
-            int n=q.size();
-            while(n--){
-                Node* temp=q.front();
-                q.pop();
-                if(temp->data==x)
-                return level;
-                if(temp->left)
-                q.push(temp->left);
-                if(temp->right)
-                q.push(temp->right);
-            }
-            level++;
-        }
-        return -1;
+        if(!root)
+        return 0;
+        if(root->data==x)
+        return count;
+        return leveel(root->left,x,count+1)+leveel(root->right,x,count+1);
     }
     bool parentof(Node* root,int x,int y)
     {
@@ -132,8 +119,11 @@ class Solution {
         // write code here
         if(x==y)
         return 0;
-        int l1=leveel(root,x);
-        int l2=leveel(root,y);
+        if(!root->left&&!root->right)
+        return 0;
+        int l1=-1,l2=-1;
+        l1=leveel(root,x,0);
+        l2=leveel(root,y,0);
         if(l1!=l2)
         return 0;
         if(l1==-1||l2==-1)
