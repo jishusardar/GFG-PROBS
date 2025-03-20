@@ -42,26 +42,22 @@ class Solution
 {
     public:
     //Function to return list containing elements of right view of binary tree.
+    void traverse(Node* root,int i,vector<int>&ans)
+    {
+        if(!root)
+        return;
+        if(i==ans.size())
+        ans.push_back(root->data);
+        if(root->right)
+        traverse(root->right,i+1,ans);
+        if(root->left)
+        traverse(root->left,i+1,ans);
+    }
     vector<int> rightView(Node *root)
     {
        // Your Code her
        vector<int>ans;
-       if(!root)
-       return ans;
-       queue<Node*>st;
-       st.push(root);
-       while(!st.empty()){
-           int n=st.size();
-           ans.push_back(st.back()->data);
-           while(n--){
-               Node* temp=st.front();
-               st.pop();
-               if(temp->left)
-               st.push(temp->left);
-               if(temp->right)
-               st.push(temp->right);
-           }
-       }
+       traverse(root,0,ans);
        return ans;
     }
 };
