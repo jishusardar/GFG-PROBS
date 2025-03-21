@@ -108,34 +108,28 @@ class Solution {
         find(root->left,l,r,pos-1);
         find(root->right,l,r,pos+1);
     }
+    void traverse(Node* root,int pos,vector<int>&ans,vector<int>&count,int leveel)
+    {
+        if(!root)
+        return;
+        if(count[pos]>leveel){
+            ans[pos]=root->data;
+            count[pos]=leveel;
+        }
+        if(root->left){
+            traverse(root->left,pos-1,ans,count,leveel+1);
+        }
+        if(root->right){
+            traverse(root->right,pos+1,ans,count,leveel+1);
+        }
+    }
     vector<int> topView(Node *root) {
         // code here
         int l=0,r=0;
         find(root,l,r,0);
-        queue<Node*>q;
-        queue<int>index;
-        q.push(root);
-        index.push(-1*l);
         vector<int>ans(r-l+1);
-        vector<bool>count(r-l+1,0);
-        while(!q.empty()){
-            Node* temp=q.front();
-            int pos=index.front();
-            q.pop();
-            index.pop();
-            if(!count[pos]){
-                count[pos]=1;
-                ans[pos]=temp->data;
-            }
-            if(temp->left){
-                q.push(temp->left);
-                index.push(pos-1);
-            }
-            if(temp->right){
-                q.push(temp->right);
-                index.push(pos+1);
-            }
-        }
+        vector<int>count(r-l+1,INT_MAX);
+        traverse(root,-1*l,ans,count,0);
         return ans;
     }
 };
