@@ -61,12 +61,12 @@ class Solution {
     Node* CreateTree(vector<int>&in,vector<int>&post,int Instart,int Inend,int index)
     {
         if(Instart>Inend)
-        return NULL;
-        Node* root=new Node(post[index]);
-        int pos=find(in,Instart,Inend,post[index]);
-        root->left=CreateTree(in,post,Instart,pos-1,index-(Inend-pos)-1);
-        root->right=CreateTree(in,post,pos+1,Inend,index-1);
-        return root;
+    return NULL;
+    Node* root=new Node(post[index]);
+    int pos=find(in,Instart,Inend,post[index]);
+    root->right=CreateTree(in,post,pos+1,Inend,index-1);
+    root->left=CreateTree(in,post,Instart,pos-1,index-(Inend-pos)-1);
+    return root;
     }
     // Function to return a tree created from postorder and inoreder traversals.
     Node* buildTree(vector<int> inorder, vector<int> postorder) {
