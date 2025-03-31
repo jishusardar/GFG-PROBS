@@ -96,37 +96,33 @@ Node* buildTree(string str)
 
 class Solution {
   public:
-    void find(Node* root,int &l,int &r,int pos)
-    {
-        if(!root)
-        return;
-        
-        l=min(l,pos);
-        r=max(r,pos);
-        find(root->left,l,r,pos-1);
-        find(root->right,l,r,pos+1);
-        
+    void finds(Node* root,int &l,int &r,int level)
+{
+    if(!root)
+    return;
+    l=min(l,level);
+    r=max(r,level);
+    finds(root->left,l,r,level-1);
+    finds(root->right,l,r,level+1);
+}
+void Traverse(Node* root,vector<int>&ans,vector<int>&temp,int index,int level)
+{
+    if(!root)
+    return;
+    if(temp[index]<=level){
+        temp[index]=level;
+        ans[index]=root->data;
     }
-    void traverse(Node* root,int pos,vector<int>&ans,vector<int>&count,int leveel)
-    {
-        if(!root)
-        return;
-        if(count[pos]<=leveel){
-            ans[pos]=root->data;
-            count[pos]=leveel;
-        }
-        if(root->left)
-        traverse(root->left,pos-1,ans,count,leveel+1);
-        if(root->right)
-        traverse(root->right,pos+1,ans,count,leveel+1);
-    }
+    Traverse(root->left,ans,temp,index-1,level+1);
+    Traverse(root->right,ans,temp,index+1,level+1);
+}
     vector <int> bottomView(Node *root) {
         // Your Code Here
         int l=0,r=0;
-        find(root,l,r,0);
+        finds(root,l,r,0);
         vector<int>ans(r-l+1);
         vector<int>count(r-l+1,INT_MIN);
-        traverse(root,-1*l,ans,count,0);
+        Traverse(root,ans,count,-1*l,0);
         return ans;
     }
 };
