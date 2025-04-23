@@ -97,45 +97,70 @@ class Solution {
   public:
     // Function to return a list of integers denoting the node
     // values of both the BST in a sorted order.
-    void inorder(Node* root,vector<int>&ans)
-    {
-        if(!root)
-        return;
-        inorder(root->left,ans);
-        ans.push_back(root->data);
-        inorder(root->right,ans);
-    }
     vector<int> merge(Node *root1, Node *root2) {
         // Your code here
-        vector<int>arr1;
-        vector<int>arr2;
-        inorder(root1,arr1);
-        inorder(root2,arr2);
-        int i=0,j=0;
         vector<int>ans;
-        while(i<arr1.size()&&j<arr2.size()){
-            if(arr1[i]>arr2[j]){
-                ans.push_back(arr2[j]);
-                j++;
+        stack<Node*>s1;
+        stack<Node*>s2;
+        while(root1){
+            s1.push(root1);
+            root1=root1->left;
+        }
+        while(root2){
+            s2.push(root2);
+            root2=root2->left;
+        }
+        while(!s1.empty()&&!s2.empty()){
+            if(s1.top()->data>s2.top()->data){
+                Node* temp=s2.top();
+                s2.pop();
+                ans.push_back(temp->data);
+                root2=temp->right;
             }
-            else if(arr1[i]<arr2[j]){
-                ans.push_back(arr1[i]);
-                i++;
+            else if(s1.top()->data<s2.top()->data){
+                Node* temp=s1.top();
+                s1.pop();
+                ans.push_back(temp->data);
+                root1=temp->right;
             }
             else{
-                ans.push_back(arr1[i]);
-                i++;
-                ans.push_back(arr2[j]);
-                j++;
+                Node* temp1=s1.top();
+                Node* temp2=s2.top();
+                s1.pop();
+                s2.pop();
+                ans.push_back(temp1->data);
+                root1=temp1->right;
+                ans.push_back(temp2->data);
+                root2=temp2->right;
+            }
+            while(root1){
+                s1.push(root1);
+                root1=root1->left;
+            }
+            while(root2){
+                s2.push(root2);
+                root2=root2->left;
             }
         }
-        while(i<arr1.size()){
-            ans.push_back(arr1[i]);
-            i++;
+        while(!s1.empty()){
+            Node* temp=s1.top();
+            s1.pop();
+            ans.push_back(temp->data);
+            root1=temp->right;
+            while(root1){
+                s1.push(root1);
+                root1=root1->left;
+            }
         }
-        while(j<arr2.size()){
-            ans.push_back(arr2[j]);
-            j++;
+        while(!s2.empty()){
+            Node* temp=s2.top();
+            s2.pop();
+            ans.push_back(temp->data);
+            root2=temp->right;
+            while(root2){
+                s2.push(root2);
+                root2=root2->left;
+            }
         }
         return ans;
     }
