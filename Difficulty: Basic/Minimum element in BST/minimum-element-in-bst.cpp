@@ -110,9 +110,10 @@ class Solution {
   public:
     int minValue(Node* root) {
         // Code here
-        if(!root->left)
+        while(root->left){
+            root=root->left;
+        }
         return root->data;
-        return minValue(root->left);
     }
 };
 
