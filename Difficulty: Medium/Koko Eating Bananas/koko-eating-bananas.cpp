@@ -8,7 +8,7 @@ class Solution {
             end=max(end,arr[i]);
         }
         start/=k;
-        if(start==0)
+        if(!start)
         start++;
         int ans;
         while(start<=end){
