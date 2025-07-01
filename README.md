@@ -1,2 +1,2 @@
 # GFG-POTDS
-Geek For Geeks Problem Of The Day Solutions
+Geek For Geeks Solutions
