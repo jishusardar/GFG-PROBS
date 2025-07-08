@@ -6,11 +6,11 @@ class Solution {
         // Code here
         vector<int>count(leaves+1,0);
         for(int i=0;i<N;i++){
-            int f=frogs[i];
-            if(f<=leaves&&!count[f])
-            {
-                for(int j=f;j<=leaves;j+=f)
-                count[j]+=1;
+            int num=frogs[i];
+            if(num<=leaves&&count[num]==0){
+                for(int j=num;j<=leaves;j+=num){
+                    count[j]++;
+                }
             }
         }
         int ans=0;
