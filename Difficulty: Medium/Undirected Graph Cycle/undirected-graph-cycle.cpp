@@ -1,26 +1,23 @@
 class Solution {
   public:
-    bool detect(vector<vector<int>>& Adjmat, int start, vector<bool>& visited) {
-        queue<pair<int,int>> q; 
-        q.push({start, -1});
-        visited[start] = true;
-
-        while (!q.empty()) {
-            int node = q.front().first;
-            int parent = q.front().second;
+    bool detect(vector<vector<int>>&Adjmat,int v,vector<bool>&visited)
+    {
+        queue<pair<int,int>>q;
+        q.push(make_pair(v,-1));
+        while(!q.empty()){
+            int node=q.front().first;
+            int parent=q.front().second;
             q.pop();
-
-            for (int neigh : Adjmat[node]) {
-                if (!visited[neigh]) {
-                    visited[neigh] = true;
-                    q.push({neigh, node});
-                } 
-                else if (neigh != parent) {
-                    return true; // cycle found
-                }
+            for(int i=0;i<Adjmat[node].size();i++){
+                if(parent==Adjmat[node][i])
+                continue;
+                if(visited[Adjmat[node][i]])
+                return 1;
+                visited[Adjmat[node][i]]=1;
+                q.push(make_pair(Adjmat[node][i],node));
             }
         }
-        return false;
+        return 0;
     }
     bool isCycle(int V, vector<vector<int>>& edges) {
         // Code here
@@ -29,13 +26,11 @@ class Solution {
             Adjmat[edges[i][0]].push_back(edges[i][1]);
             Adjmat[edges[i][1]].push_back(edges[i][0]);
         }
-        vector<bool>visited(Adjmat.size(),0);
-         for (int i = 0; i < V; i++) {
-            if (!visited[i]) {
-                if (detect(Adjmat, i, visited))
-                    return true;
-            }
+        vector<bool>visited(V,0);
+        for(int i=0;i<V;i++){
+          if(!visited[i]&&detect(Adjmat,i,visited))
+          return 1;
         }
-        return false;
+        return 0;
     }
 };
