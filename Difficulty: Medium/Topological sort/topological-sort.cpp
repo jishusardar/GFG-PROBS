@@ -1,14 +1,29 @@
 class Solution {
   public:
-    void DFS(vector<vector<int>>&Adj,int v,vector<bool>&visited,stack<int>&st)
+    void BFS(vector<vector<int>>&Adj,vector<int>&ans,int v)
     {
-        visited[v]=1;
-        for(int i=0;i<Adj[v].size();i++){
-            if(!visited[Adj[v][i]]){
-                DFS(Adj,Adj[v][i],visited,st);
+        vector<int>indegnodes(v,0);
+        queue<int>q;
+        for(int i=0;i<Adj.size();i++){
+            for(int j=0;j<Adj[i].size();j++){
+                indegnodes[Adj[i][j]]++;
             }
         }
-        st.push(v);
+        for(int i=0;i<v;i++){
+            if(indegnodes[i]==0)
+            q.push(i);
+        }
+        while(!q.empty()){
+            int node=q.front();
+            q.pop();
+            ans.push_back(node);
+            for(int i=0;i<Adj[node].size();i++){
+                indegnodes[Adj[node][i]]--;
+                if(indegnodes[Adj[node][i]]==0){
+                    q.push(Adj[node][i]);
+                }
+            }
+        }
     }
     vector<int> topoSort(int V, vector<vector<int>>& edges) {
         // code here
@@ -18,16 +33,8 @@ class Solution {
         for(int i=0;i<edges.size();i++){
             Adj[edges[i][0]].push_back(edges[i][1]);
         }
-        for(int i=0;i<V;i++){
-            if(!visited[i]){
-                DFS(Adj,i,visited,st);
-            }
-        }
         vector<int>ans;
-        while(!st.empty()){
-            ans.push_back(st.top());
-            st.pop();
-        }
+        BFS(Adj,ans,V);
         return ans;
         
     }
