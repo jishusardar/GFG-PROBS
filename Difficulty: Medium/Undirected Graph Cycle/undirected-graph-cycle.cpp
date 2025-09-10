@@ -1,21 +1,15 @@
 class Solution {
   public:
-    bool detect(vector<vector<int>>&Adjmat,int v,vector<bool>&visited)
+    bool detect(vector<vector<int>>&Adjmat,int v,int parent,vector<bool>&visited)
     {
-        queue<pair<int,int>>q;
-        q.push(make_pair(v,-1));
-        while(!q.empty()){
-            int node=q.front().first;
-            int parent=q.front().second;
-            q.pop();
-            for(int i=0;i<Adjmat[node].size();i++){
-                if(parent==Adjmat[node][i])
-                continue;
-                if(visited[Adjmat[node][i]])
-                return 1;
-                visited[Adjmat[node][i]]=1;
-                q.push(make_pair(Adjmat[node][i],node));
-            }
+        visited[v]=1;
+        for(int i=0;i<Adjmat[v].size();i++){
+            if(Adjmat[v][i]==parent)
+            continue;
+            if(visited[Adjmat[v][i]])
+            return 1;
+            if(detect(Adjmat,Adjmat[v][i],v,visited))
+            return 1;
         }
         return 0;
     }
@@ -28,7 +22,7 @@ class Solution {
         }
         vector<bool>visited(V,0);
         for(int i=0;i<V;i++){
-          if(!visited[i]&&detect(Adjmat,i,visited))
+          if(!visited[i]&&detect(Adjmat,i,-1,visited))
           return 1;
         }
         return 0;
