@@ -1,31 +1,34 @@
 class Solution {
-  public:
+  public: 
+    bool DFS(int node,vector<bool>&paths,vector<bool>&visited,vector<vector<int>>&Adj)
+    {
+        paths[node]=1;
+        visited[node]=1;
+        for(int i=0;i<Adj[node].size();i++){
+            if(paths[Adj[node][i]])
+            return 1;
+            if(visited[Adj[node][i]])
+            continue;
+            if(DFS(Adj[node][i],paths,visited,Adj))
+            return 1;
+        }
+        paths[node]=0;
+        return 0;
+    }
     bool isPossible(int N, int P, vector<pair<int, int> >& pre) {
         // Code here
-        queue<int>q;
-        vector<int>count(N,0);
-        int n=pre.size();
-        vector<vector<int>>adj(N);
-        for(int i=0;i<n;i++){
-            adj[pre[i].second].push_back(pre[i].first);
-            count[pre[i].first]++;
+        vector<bool>visited(N,0);
+        vector<bool>paths(N,0);
+        vector<vector<int>>Adj(N);
+        for(int i=0;i<pre.size();i++){
+            Adj[pre[i].second].push_back(pre[i].first);
         }
         for(int i=0;i<N;i++){
-            if(count[i]==0)
-            q.push(i);
-        }
-        while(!q.empty()){
-            int node=q.front();
-            q.pop();
-            N--;
-            for(int i=0;i<adj[node].size();i++){
-                count[adj[node][i]]--;
-                if(count[adj[node][i]]==0)
-                q.push(adj[node][i]);
+            if(!visited[i]){
+                if(DFS(i,paths,visited,Adj))
+                return 0;
             }
         }
-       if(N)
-       return 0;
-       return 1;
+        return 1;
     }
 };
