@@ -14,22 +14,27 @@ class Solution {
         return -1;
         if(X==0&&Y==0)
         return 0;
-        queue<pair<int,pair<int,int>>>q;
-        q.push({0,{0,0}});
+        queue<pair<int,int>>q;
+        q.push({0,0});
         A[0][0]=0;
+        int step=0;
         while(!q.empty()){
-            int i=q.front().first;
-            int j=q.front().second.first;
-            int step=q.front().second.second;
-            q.pop();
-            for(int k=0;k<4;k++){
-                if(valid(i+rows[k],j+colms[k],N,M)&&A[i+rows[k]][j+colms[k]]==1){
-                    if(i+rows[k]==X&&j+colms[k]==Y)
-                    return step+1;
-                    A[i+rows[k]][j+colms[k]]=0;
-                    q.push({i+rows[k],{j+colms[k],step+1}});
+            int size=q.size();
+            while(size--){
+                int i=q.front().first;
+                int j=q.front().second;
+                q.pop();
+                for(int k=0;k<4;k++){
+                    if(valid(i+rows[k],j+colms[k],N,M)&&A[i+rows[k]][j+colms[k]]){
+                      if(i+rows[k]==X&&j+colms[k]==Y)
+                      return step+1;
+                      A[i+rows[k]][j+colms[k]]=0;
+                      q.push({i+rows[k],j+colms[k]});
                 }
             }
+            
+           }
+            step++;
         }
         return -1;
     }
