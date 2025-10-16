@@ -8,8 +8,8 @@ class Solution {
     }
     void UnionByRanks(int u,int v,vector<int>&parent,vector<int>&ranks)
     {
-        int pu=findparent(u,parent);
-        int pv=findparent(v,parent);
+        int pu=parent[u];
+        int pv=parent[v];
         if(ranks[pu]>ranks[pv]){
             parent[pv]=pu;
         }
