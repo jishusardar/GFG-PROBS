@@ -1,51 +1,46 @@
 //Position this line where user code will be pasted.
 class Solution {
   public:
-    void topology(int node,vector<vector<int>>&adj,vector<bool>&visited,stack<int>&s)
-    {
-        visited[node]=1;
-        for(int i=0;i<adj[node].size();i++){
-            if(!visited[adj[node][i]])
-            topology(adj[node][i],adj,visited,s);
+    void DFS(int node,vector<vector<int>>&Adj,vector<bool>&visited,vector<int>&disc,vector<int>&low,int &count,stack<int>&s,vector<bool>&Instack,int &ans) {
+    visited[node]=1;
+    disc[node]=low[node]=count;
+    s.push(node);
+    Instack[node]=1;
+    for (int i=0;i<Adj[node].size();i++) {
+        int neib=Adj[node][i];
+        if (!visited[neib]) {
+            count++;
+            DFS(neib,Adj,visited,disc,low,count,s,Instack,ans);
+            low[node]=min(low[node],low[neib]);
         }
-        s.push(node);
+        else {
+            if (Instack[neib])
+                low[node]=min(low[node],disc[neib]);
+        }
     }
-    void DFS(int node,vector<vector<int>>&adj,vector<bool>&visited)
-    {
-        visited[node]=1;
-        for(int i=0;i<adj[node].size();i++){
-            if(!visited[adj[node][i]])
-            DFS(adj[node][i],adj,visited);
+    if (disc[node]==low[node]) {
+            ans++;
+            while (Instack[node]) {
+                Instack[s.top()]=0;
+                s.pop();
+            }
+            
         }
     }
     int kosaraju(vector<vector<int>> &adj) {
         // code here
+        int V=adj.size();
+        vector<bool>visited(V,0);
+        vector<int>disc(V);
+        vector<int>low(V);
+        int count=0;
         stack<int>s;
-        vector<bool>visited(adj.size(),0);
-        for(int i=0;i<adj.size();i++){
+        vector<bool>Instack(V,0);
+        int ans=0;
+        for(int i=0;i<V;i++){
             if(!visited[i])
-            topology(i,adj,visited,s);
+            DFS(i,adj,visited,disc,low,count,s,Instack,ans);
         }
-        
-        vector<vector<int>>adj2(adj.size());
-        for(int i=0;i<adj.size();i++){
-            int u=i;
-            for(int j=0;j<adj[i].size();j++){
-                int v=adj[i][j];
-                adj2[v].push_back(u);
-            }
-        }
-        for(int i=0;i<visited.size();i++)
-        visited[i]=0;
-        int scc=0;
-        while(!s.empty()){
-            int node=s.top();
-            s.pop();
-            if(!visited[node]){
-                scc++;
-                DFS(node,adj2,visited);
-            }
-        }
-        return scc;
+        return ans;
     }
 };
