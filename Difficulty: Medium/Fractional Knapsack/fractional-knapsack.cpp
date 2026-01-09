@@ -7,27 +7,25 @@ class Solution {
     double fractionalKnapsack(vector<int>& val, vector<int>& wt, int capacity) {
         // code here
         int n=val.size();
-        vector<pair<double,int>>perweight(val.size());
-        for(int i=0;i<val.size();i++){
-            double temp=val[i];
-            temp/=wt[i];
-            perweight[i]={temp,i};
+        priority_queue<pair<double,int>>pq;
+    for (int i=0;i<n;i++) {
+        double temp=val[i];
+        temp/=wt[i];
+        pq.push({temp,i});
+    }
+    double ans=0;
+    while (capacity!=0&&!pq.empty()) {
+        if (wt[pq.top().second]<=capacity) {
+            capacity-=wt[pq.top().second];
+            ans+=val[pq.top().second];
         }
-        sort(perweight.begin(),perweight.end(),comp);
-        double ans=0;
-        for(int i=0;i<n;i++){
-            if(capacity!=0){
-                if(capacity>=wt[perweight[i].second]){
-                    ans+=val[perweight[i].second];
-                    capacity-=wt[perweight[i].second];
-                }
-                else{
-                    ans+=capacity*perweight[i].first;
-                    capacity=0;
-                }
-            }
+        else {
+            ans+=pq.top().first*capacity;
+            capacity=0;
         }
-        return ans;
+        pq.pop();
+    }
+    return ans;
         
     }
 };
