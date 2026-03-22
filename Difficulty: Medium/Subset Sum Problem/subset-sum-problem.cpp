@@ -1,15 +1,18 @@
 class Solution {
   public:
-    bool possible(int sum,vector<int>&arr,int n){
+    bool find(int sum,vector<int>&arr,int index,int n){
         if(sum==0)
         return 1;
-        if(n==0||sum<0)
+        if(index==n)
         return 0;
-        return possible(sum-arr[n-1],arr,n-1)||possible(sum,arr,n-1);
+        if(sum<arr[index])
+        return find(sum,arr,index+1,n);
+        else
+        return find(sum-arr[index],arr,index+1,n)||find(sum,arr,index+1,n);
     }
     bool isSubsetSum(vector<int>& arr, int sum) {
         // code here
         int n=arr.size();
-        return possible(sum,arr,n);
+        return find(sum,arr,0,n);
     }
 };
