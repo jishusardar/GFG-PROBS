@@ -1,18 +1,21 @@
 class Solution {
   public:
-    bool find(int sum,vector<int>&arr,int index,int n){
-        if(sum==0)
-        return 1;
-        if(index==n)
-        return 0;
-        if(sum<arr[index])
-        return find(sum,arr,index+1,n);
-        else
-        return find(sum-arr[index],arr,index+1,n)||find(sum,arr,index+1,n);
-    }
     bool isSubsetSum(vector<int>& arr, int sum) {
         // code here
         int n=arr.size();
-        return find(sum,arr,0,n);
+vector<int>dp(sum+1,0);
+    vector<int>next(sum+1,0);
+    dp[0]=1;
+    next[0]=1;
+    for (int i=n-1;i>=0;i--) {
+        for (int j=1;j<=sum;j++) {
+            if (j<arr[i])
+                dp[j]=next[j];
+            else
+                dp[j]=next[j-arr[i]]||next[j];
+        }
+        next=dp;
+    }
+    return dp[sum];
     }
 };
