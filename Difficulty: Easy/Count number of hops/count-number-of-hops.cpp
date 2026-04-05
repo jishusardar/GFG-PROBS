@@ -2,19 +2,18 @@
 class Solution {
   public:
     // Function to count the number of ways in which frog can reach the top.
-    int countWays(int n) {
-
-        // your code here
-        int curr=1;
-    int prev1=0;
-    int prev2=0;
-    for (int i=n-1;i>=0;i--) {
-        int ans=curr+prev1+prev2;
-        prev2=prev1;
-        prev1=curr;
-        curr=ans;
+    int find(int n,vector<int>&dp){
+        if(n<0)
+        return 0;
+        if(n==0)
+        return 1;
+        if(dp[n]!=-1)
+        return dp[n];
+        return dp[n]=find(n-1,dp)+find(n-2,dp)+find(n-3,dp);
     }
-    return curr;
-        
+    int countWays(int n) {
+        // your code here
+        vector<int>dp(n+1,-1);
+        return find(n,dp);
     }
 };
