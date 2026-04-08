@@ -4,26 +4,30 @@ class Solution {
   public:
     int lengthOfLongestAP(vector<int>& arr) {
         // code here
-        int ans=2;
         int n=arr.size();
         if(n<=2)
         return n;
-        unordered_map<int,int>mm[n];
+        int maxi=INT_MIN;
+        int mini=INT_MAX;
+        for(int i=0;i<n;i++){
+            maxi=max(maxi,arr[i]);
+            mini=min(mini,arr[i]);
+        }
+        int ans=2;
+        vector<vector<int>>dp(n,vector<int>(maxi-mini+1,0));
         for(int i=1;i<n;i++){
             for(int j=i-1;j>=0;j--){
-               int d=arr[i]-arr[j];
-               if(mm[j].count(d)){
-                   mm[i][d]=max(mm[i][d],1+mm[j][d]);
-                   ans=max(ans,mm[i][d]);
-               }
-               else{
-                   if(!mm[i].count(d)){
-                       mm[i][d]=2;
-                   }
-               }
+                int diff=arr[i]-arr[j];
+                if(dp[j][diff]){
+                    dp[i][diff]=max(dp[i][diff],1+dp[j][diff]);
+                    ans=max(ans,dp[i][diff]);
+                }
+                else{
+                    if(!dp[i][diff])
+                    dp[i][diff]=2;
+                }
             }
         }
         return ans;
-        
     }
 };
